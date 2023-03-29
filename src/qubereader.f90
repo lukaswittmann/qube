@@ -1,4 +1,4 @@
-module gpgReader
+module qubeReader
    use mctc_env, only : wp
    implicit none
 
@@ -66,4 +66,4 @@ contains
    end subroutine extractNumber
 
 
-end module gpgReader
+end module qubeReader

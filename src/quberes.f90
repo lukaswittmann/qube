@@ -1,6 +1,6 @@
 
 !* Module for reading the .res files and storing the data in a structure
-module gpgRes
+module qubeRes
    use mctc_env, only : wp
    implicit none
 
@@ -146,4 +146,4 @@ contains
 
 
 
-end module gpgRes
+end module qubeRes
