@@ -1,9 +1,7 @@
-# General (Quantum Chemistry) Properties Grabber
+# QUBE - Quantum chemistry Utility for Benchmark Evaluation
 
-gpg (General Quantum Chemistry Properties Grabber) is a Fortran-based tool designed to extract a range of general properties from the output files of quantum chemistry calculations. 
+QUBE (Quantum chemistry Utility for Benchmark Evaluation) is a Fortran-based tool designed for extracting energies from the output files of quantum chemistry calculations for large benchmark sets. 
+QUBE utilizes reference energies for statistical evaluation and comparison of the results obtained from the benchmark sets. 
+For that, QUBE uses .res-files as an input, which contain the benchmark structure and stoichiometry, as well as the reference energies. 
 
-GPP will support a variety of popular quantum chemistry software packages, including ORCA, Qchem and Turbomole, among others.
-
-With GPP, users can quickly and easily obtain a wide range of properties, including molecular geometries, electronic energies, dipole moments, vibrational frequencies, and more. GPP is designed to be flexible, efficient, and easy to use, making it a valuable tool for researchers working in the field of quantum chemistry. 
-
-The source code for GPP is freely available on GitHub, and contributions from the community are always welcome.
+With QUBE, users can efficiently evaluate the accuracy and reliability of quantum chemistry calculations, aiding in the development of new methods and algorithms.
