@@ -2,6 +2,7 @@
 !* Module for reading the .res files and storing the data in a structure
 module qubeRes
    use mctc_env, only : wp
+	use stringifor_string_t
    implicit none
 
 	!* Derived type for benchmark structure
@@ -41,108 +42,103 @@ contains
       implicit none
 
       type(benchmarkType), intent(inout) :: benchmark
-		character(len=200) :: lineStr
+		character(len=200) :: ReadInLineStr
 		integer :: iret, iostatus 
 		character(len=100) :: dirStr, stoichStr, refEnergyStr
 		character(len=:), dimension(:), allocatable :: workStr
+		integer :: dim, line, i
+		character(len=:), dimension(:), allocatable :: dirList, stoichList
+		real(wp) :: refEnergy
+
+		type(string) ::  lineStr
+		type(string), allocatable :: substrings(:)
 
       ! Open the file
       open(unit=2, file=benchmark%path//benchmark%resFilename, iostat=iret, status='old')
       ! If the file doesn't exist, return
       if(iret.ne.0) return
-      do
+      do line = 1, 10000000
 
       	! Read a line
-         read(2,'(a)',  iostat=iostatus) lineStr
+         read(2,'(a)',  iostat=iostatus) ReadInLineStr
 
-      	! If the line contains the $tmer keywprd, extract the data
-         if(index(lineStr, '$tmer') .ne. 0) then
+			! Convert to string
+			lineStr = ReadInLineStr
 
-				call readResLine(lineStr, dirStr, stoichStr, refEnergyStr)		
+			call lineStr%split(sep=' ', tokens=substrings )
 
-				! write(*,*) trim(lineStr)
-				! write(*,*) ' '
-				! write(*,*) trim(dirStr)
-				! write(*,*) ' '
-				! write(*,*) trim(stoichStr)
-				! write(*,*) ' '
-				! write(*,*) trim(refEnergyStr)
-				write(*,*) '======================================================'
+			write(*,*) "======"
+		   do i=1,size(substrings, dim=1)
+   			write(*,*) substrings(i)
+   		enddo
 
-				! TODO Separate strings, that are separated by spaces or tabs
+			dim = size(substrings, dim=1)
 
-				! Separate the stoichiometry string
-				call separateString(trim(stoichStr), workStr)
-				write(*,*) workStr
-         endif
+			write(*,*) dim
 			
 			! If we've reached the end of the file, return
       	if (iostatus /= 0) exit
       enddo
       close(2)
+
+
       
    end subroutine readBenchmarkResfile
 
 
-	!* Separates a string containing multiple tab or space delimted values
-	subroutine separateString(strIn, strOut)
+	!* Replaces multiple spaces or tabs with a single space, creates new file
+	subroutine makeSpaceDelimitedRes(benchmark)
+
 		implicit none
 
-		character(len=*), intent(in) :: strIn
-		character(len=:), dimension(:), allocatable, intent(out) :: strOut
+		type(benchmarkType), intent(in) :: benchmark
+		integer :: iret, iostatus 
+		character(len=200) :: lineStr
 
-	end subroutine separateString
+		! Rename the original file
+		call system("mv " // benchmark%path//benchmark%resFilename // " " &
+			// benchmark%path//benchmark%resFilename // "-old")
 
+		! Open the file
+      open(unit=3, file=benchmark%path//benchmark%resFilename//"-old", &
+			iostat=iret, status='old')
+   
+		! If the file doesn't exist, return
+      if(iret.ne.0) return
+      do
+      	! Read a line
+         read(3,'(a)',  iostat=iostatus) lineStr
+      	! If the line contains the $tmer keywprd, extract the data
+         if(index(lineStr, '$tmer') .ne. 0) then
+				! Dont tell the FORTRAN gods ;)
+				call system("echo " // lineStr // " | tr -s '[:blank:]' ' ' >> " // &
+					benchmark%path//benchmark%resFilename)
+         endif
+			! If we've reached the end of the file, return
+      	if (iostatus /= 0) exit
+      enddo
+      close(3)
 
-	!* Reads a line from the .res file and extracts the data as strings
-	subroutine readResLine(lineStr, dirStr, stoichStr, refEnergyStr)
+		write (*,*) 'File converted!'
+		write (*,*) 'File written to: ' // benchmark%path//benchmark%resFilename
+
+	end subroutine makeSpaceDelimitedRes
+
+	!* Counts the number of spaces in a string
+	function countSpaces(input_str) result(count)
 		implicit none
+		character(len=*) :: input_str
+		integer :: i, count
 
-		character(len=*), intent(inout) :: lineStr
-		character(len=*), intent(out) :: dirStr, stoichStr, refEnergyStr
+		count = 0
 
-		! Indexing variables
-		character(len=:), allocatable :: strStartSep, strXSep, strRefSep
-		integer :: strStart, strRef, strX
+		do i = 1, len(input_str)
+			if (input_str(i:i) == " ") then
+					count = count + 1
+			end if
+		end do
 
-		! Separators
-      strStartSep = '$tmer'
-		strXSep = 'x'
-		strRefSep = 'w'		
-
-		! Extract the indices
-		strStart = scan(lineStr, strStartSep, back=.false.) + len(strStartSep)
-		strX = scan(lineStr, strXSep, back=.false.)
-		strRef = scan(lineStr, strRefSep, back=.false.)
-
-		! Extract the strings
-		dirStr = lineStr(strStart:strX-len(strXSep))
-		stoichStr = lineStr(strX+len(strXSep):strRef-len(strRefSep)-1)
-		refEnergyStr = lineStr(strRef+len(strRefSep):)
-
-	end subroutine readResLine
-
-
-   !* Extracts a string from a string with optional keyword
-   subroutine extractString(strIn, keyword, strOut)
-      implicit none
-
-      character(len=*), intent(in) :: strIn, keyword
-      character(len=*), intent(out) :: strOut
-      integer :: strStart
-
-      strStart = scan(strIn, keyword, back=.false.) + len(keyword)
-
-		strOut = strIn(strStart:)
-
-   end subroutine extractString
-
-	!* Extracts an int from a string with optional keyword
-   ! subroutine extractInt(str, keyword, number)
-   !    implicit none
-
-   ! end subroutine extractInt
-
+	end function countSpaces
 
 
 

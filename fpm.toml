@@ -14,3 +14,5 @@ library = false
 
 [dependencies]
 mctc-lib.git = "https://github.com/grimme-lab/mctc-lib.git"
+StringiFor.git = "https://github.com/szaghi/StringiFor.git"
+

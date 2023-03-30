@@ -18,6 +18,8 @@ program main
    benchmark%path = '/home/wittmann/Documents/majestix-backup/wittmann/dft-c/benchmark/sets/X40x10_2018/'
    benchmark%numInteractions = 400
 
+   !call makeSpaceDelimitedRes(benchmark)
+
    call readBenchmarkResfile(benchmark)
 
 end program main
