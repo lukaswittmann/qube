@@ -194,8 +194,7 @@ subroutine get_en_orca_nl(e,filen)
     open(unit=10,file=filen,iostat=iret)
     if(iret/=0) return
     4       read(10,'(a)',end=20) a
-    if(index(a,'NL    ENERGY')/=0)then
-        !     if(index(a,'initial e(tot)')/=0)then
+    if(index(a,'NL    Energy')/=0)then
         call readl(a,xx,nn)
         e=xx(nn)
     endif
