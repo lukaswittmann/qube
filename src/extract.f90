@@ -150,124 +150,6 @@ subroutine getengcp(e,filen)
 end
 
 !* DFT-C
-subroutine getendftc(e,filen)
-    implicit none
-    real*8 xx(10),e
-    integer nn,iret
-    character*(*) filen
-    character*120 a
-    open(unit=10,file=filen,iostat=iret)
-    if(iret/=0) return
-    4           read(10,'(a)',end=20) a
-    call readl(a,xx,nn)
-    !      if(nn>=4) then
-    !         e=xx(2)
-    !      endif
-    e=xx(1)
-    goto 4
-    20         continue
-    close (10)
-end
-
-!* D3, D4
-subroutine getend3(e,filen)
-   implicit none
-   real*8 xx(10),e
-   integer nn,iret
-   character*(*) filen
-   character*120 a
-   open(unit=10,file=filen,iostat=iret)
-   if(iret/=0) return
-   4               read(10,'(a)',end=20) a
-   write(*,*) filen
-
-   call readl(a,xx,nn)
-   e=xx(1)
-   goto 4
-   20            continue
-   close (10)
-end
-
-!* ORCA final single point
-subroutine getenorca(e,filen)
-    implicit none
-    real*8 xx(10),e
-    integer nn,iret
-    character*(*) filen
-    character*120 a
-    open(unit=10,file=filen,iostat=iret)
-    if(iret/=0) return
-    4       read(10,'(a)',end=20) a
-    if(index(a,'final single')/=0)then
-        !     if(index(a,'initial e(tot)')/=0)then
-        call readl(a,xx,nn)
-        e=xx(nn)
-    endif
-    goto 4
-    20      continue
-    close (10)
-end
-
-!* ADF final single point
-subroutine geten_adf(e,filen)
-    implicit none
-    real*8 xx(10),e
-    integer nn,iret
-    character*(*) filen
-    character*120 a
-    open(unit=10,file=filen,iostat=iret)
-    if(iret/=0) return
-    4            read(10,'(a)',end=20) a
-    if(index(a,'energy (hartree)')/=0)then
-        call readl(a,xx,nn)
-        e=xx(1)
-    endif
-    goto 4
-    20         continue
-    close (10)
-end
-
-!* ORCA NL energy
-subroutine getenorcanl(e,filen)
-    implicit none
-    real*8 xx(10),e
-    integer nn,iret
-    character*(*) filen
-    character*120 a
-    open(unit=10,file=filen,iostat=iret)
-    if(iret/=0) return
-    4       read(10,'(a)',end=20) a
-    if(index(a,'nl    energy')/=0)then
-        !     if(index(a,'initial e(tot)')/=0)then
-        call readl(a,xx,nn)
-        e=xx(nn)
-    endif
-    goto 4
-    20      continue
-    close (10)
-end
-
-!* ORCA RI-MP2 correlation energy
-subroutine getrimp2c(e,filen)
-    implicit none
-    real*8 xx(10),e
-    integer nn,iret
-    character*(*) filen
-    character*120 a
-    open(unit=10,file=filen,iostat=iret)
-    if(iret/=0) return
-    4       read(10,'(a)',end=20) a
-    if(index(a,' ri-mp2 correlation energy:')/=0)then
-        !     if(index(a,'initial e(tot)')/=0)then
-        call readl(a,xx,nn)
-        e=xx(nn)
-    endif
-    goto 4
-    20      continue
-    close (10)
-end
-
-
 subroutine getdftc(e,filen)
     implicit none
     real*8 xx(10),e
@@ -287,6 +169,103 @@ subroutine getdftc(e,filen)
     close (10)
 end
 
+!* D3, D4
+subroutine getend3(e,filen)
+   implicit none
+   real*8 xx(10),e
+   integer nn,iret
+   character*(*) filen
+   character*120 a
+   open(unit=10,file=filen,iostat=iret)
+   if(iret/=0) return
+   4               read(10,'(a)',end=20) a
+   call readl(a,xx,nn)
+   e=xx(1)
+   goto 4
+   20            continue
+   close (10)
+end
+
+!* ORCA final single point
+subroutine getenorca(e,filen)
+    implicit none
+    real*8 xx(10),e
+    integer nn,iret
+    character*(*) filen
+    character*120 a
+    open(unit=10,file=filen,iostat=iret)
+    if(iret/=0) return
+    4       read(10,'(a)',end=20) a
+    if(index(a,'FINAL SINGLE')/=0)then
+        !     if(index(a,'initial e(tot)')/=0)then
+        call readl(a,xx,nn)
+        e=xx(nn)
+    endif
+    goto 4
+    20      continue
+    close (10)
+end
+
+!* ADF final single point
+subroutine geten_adf(e,filen)
+    implicit none
+    real*8 xx(10),e
+    integer nn,iret
+    character*(*) filen
+    character*120 a
+    open(unit=10,file=filen,iostat=iret)
+    if(iret/=0) return
+    4            read(10,'(a)',end=20) a
+    if(index(a,'ENERGY (hartree)')/=0)then
+        call readl(a,xx,nn)
+        e=xx(1)
+    endif
+    goto 4
+    20         continue
+    close (10)
+end
+
+!* ORCA NL energy
+subroutine getenorcanl(e,filen)
+    implicit none
+    real*8 xx(10),e
+    integer nn,iret
+    character*(*) filen
+    character*120 a
+    open(unit=10,file=filen,iostat=iret)
+    if(iret/=0) return
+    4       read(10,'(a)',end=20) a
+    if(index(a,'NL    ENERGY')/=0)then
+        !     if(index(a,'initial e(tot)')/=0)then
+        call readl(a,xx,nn)
+        e=xx(nn)
+    endif
+    goto 4
+    20      continue
+    close (10)
+end
+
+!* ORCA RI-MP2 correlation energy
+subroutine getrimp2c(e,filen)
+    implicit none
+    real*8 xx(10),e
+    integer nn,iret
+    character*(*) filen
+    character*120 a
+    open(unit=10,file=filen,iostat=iret)
+    if(iret/=0) return
+    4       read(10,'(a)',end=20) a
+    if(index(a,' RI-MP2 CORRELATION ENERGY:')/=0)then
+        !     if(index(a,'initial e(tot)')/=0)then
+        call readl(a,xx,nn)
+        e=xx(nn)
+    endif
+    goto 4
+    20      continue
+    close (10)
+end
+
+
 !* ORCA CCSD(T) correlation energy
 subroutine getccsdtc(e,filen)
     implicit none
@@ -297,7 +276,7 @@ subroutine getccsdtc(e,filen)
     open(unit=10,file=filen,iostat=iret)
     if(iret/=0) return
     4       read(10,'(a)',end=20) a
-    if(index(a,'final correlation energy')/=0)then
+    if(index(a,'Final correlation energy')/=0)then
         !     if(index(a,'initial e(tot)')/=0)then
         call readl(a,xx,nn)
         e=xx(nn)
@@ -317,7 +296,7 @@ subroutine getqchemfinalsinglepoint(e,filen)
     open(unit=10,file=filen,iostat=iret)
     if(iret/=0) return
     4       read(10,'(a)',end=20) a
-    if(index(a,'total energy in the final basis set =')/=0)then
+    if(index(a,'Total energy in the final basis set =')/=0)then
         call readl(a,xx,nn)
         e=xx(nn)
     endif
@@ -336,7 +315,7 @@ subroutine getqchemdftcorr(e,filen)
     open(unit=10,file=filen,iostat=iret)
     if(iret/=0) return
     4       read(10,'(a)',end=20) a
-    if(index(a,'dft correlation      energy =')/=0)then
+    if(index(a,'DFT Correlation      Energy =')/=0)then
         call readl(a,xx,nn)
         e=xx(nn)
     endif
@@ -355,7 +334,7 @@ subroutine getqchemmosmp2corr(e,filen)
     open(unit=10,file=filen,iostat=iret)
     if(iret/=0) return
     4       read(10,'(a)',end=20) a
-    if(index(a,'total mos-mp2 correlation energy        =')/=0)then
+    if(index(a,'Total MOS-MP2 correlation energy        =')/=0)then
         call readl(a,xx,nn)
         e=xx(nn)
     endif
