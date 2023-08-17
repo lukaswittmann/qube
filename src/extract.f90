@@ -128,49 +128,8 @@ function readaa(a,istart,iend,iend2)
 end function readaa
 
 
-
-!* gCP
-subroutine getengcp(e,filen)
-    implicit none
-    real*8 xx(10),e
-    integer nn,iret
-    character*(*) filen
-    character*120 a
-    open(unit=10,file=filen,iostat=iret)
-    if(iret/=0) return
-    4               read(10,'(a)',end=20) a
-    call readl(a,xx,nn)
-    !      if(nn>=4) then
-    !         e=xx(2)
-    !      endif
-    e=xx(1)
-    goto 4
-    20            continue
-    close (10)
-end
-
-!* DFT-C
-subroutine getdftc(e,filen)
-    implicit none
-    real*8 xx(10),e
-    integer nn,iret
-    character*(*) filen
-    character*120 a
-    open(unit=10,file=filen,iostat=iret)
-    if(iret/=0) return
-    4       read(10,'(a)',end=20) a
-    if(index(a,'e(c)               :')/=0)then
-        !     if(index(a,'initial e(tot)')/=0)then
-        call readl(a,xx,nn)
-        e=xx(nn)
-    endif
-    goto 4
-    20      continue
-    close (10)
-end
-
-!* D3, D4
-subroutine getend3(e,filen)
+!* D3, D4, gCP, DFT-C
+subroutine get_en_d4(e,filen)
    implicit none
    real*8 xx(10),e
    integer nn,iret
@@ -187,7 +146,7 @@ subroutine getend3(e,filen)
 end
 
 !* ORCA final single point
-subroutine getenorca(e,filen)
+subroutine get_en_orca(e,filen)
     implicit none
     real*8 xx(10),e
     integer nn,iret
@@ -207,7 +166,7 @@ subroutine getenorca(e,filen)
 end
 
 !* ADF final single point
-subroutine geten_adf(e,filen)
+subroutine get_en_adf(e,filen)
     implicit none
     real*8 xx(10),e
     integer nn,iret
@@ -226,7 +185,7 @@ subroutine geten_adf(e,filen)
 end
 
 !* ORCA NL energy
-subroutine getenorcanl(e,filen)
+subroutine get_en_orca_nl(e,filen)
     implicit none
     real*8 xx(10),e
     integer nn,iret
@@ -246,7 +205,7 @@ subroutine getenorcanl(e,filen)
 end
 
 !* ORCA RI-MP2 correlation energy
-subroutine getrimp2c(e,filen)
+subroutine get_en_orca_rimp2c(e,filen)
     implicit none
     real*8 xx(10),e
     integer nn,iret
@@ -265,9 +224,28 @@ subroutine getrimp2c(e,filen)
     close (10)
 end
 
+!* ORCA DFA correlation energy
+subroutine get_en_orca_dftc(e,filen)
+    implicit none
+    real*8 xx(10),e
+    integer nn,iret
+    character*(*) filen
+    character*120 a
+    open(unit=10,file=filen,iostat=iret)
+    if(iret/=0) return
+    4       read(10,'(a)',end=20) a
+    if(index(a,'e(c)               :')/=0)then
+        !     if(index(a,'initial e(tot)')/=0)then
+        call readl(a,xx,nn)
+        e=xx(nn)
+    endif
+    goto 4
+    20      continue
+    close (10)
+end
 
 !* ORCA CCSD(T) correlation energy
-subroutine getccsdtc(e,filen)
+subroutine get_en_orca_ccsdtc(e,filen)
     implicit none
     real*8 xx(10),e
     integer nn,iret
@@ -287,7 +265,7 @@ subroutine getccsdtc(e,filen)
 end
 
 !* QCHEM final single point
-subroutine getqchemfinalsinglepoint(e,filen)
+subroutine get_en_qchem(e,filen)
     implicit none
     real*8 xx(10),e
     integer nn,iret
@@ -306,7 +284,7 @@ subroutine getqchemfinalsinglepoint(e,filen)
 end
 
 !* QCHEM DFT correlation energy
-subroutine getqchemdftcorr(e,filen)
+subroutine get_en_qchem_dftc(e,filen)
     implicit none
     real*8 xx(10),e
     integer nn,iret
@@ -325,7 +303,7 @@ subroutine getqchemdftcorr(e,filen)
 end
 
 !* QCHEM MOS-MP2 correlation energy
-subroutine getqchemmosmp2corr(e,filen)
+subroutine get_en_qchem_mosmp2(e,filen)
     implicit none
     real*8 xx(10),e
     integer nn,iret

@@ -65,62 +65,62 @@ subroutine gete(nmol,imet,molname,e)
       if(imet==13)then
       ! orca
          write(aa,'(a,''/orca.out'')')trim(molname(i))
-         call getenorca(e(i),aa)
+         call get_en_orca(e(i),aa)
    
       ! gcp
       elseif(imet==30)then
          write(aa,'(a,''/.CPC'')')trim(molname(i))
-         call getengcp(e(i),aa)
+         call get_en_d4(e(i),aa)
          
       ! d3
       elseif(imet==32) then
          write(aa,'(a,''/.EDISP'')')trim(molname(i))
-         call getend3(e(i),aa)
+         call get_en_d4(e(i),aa)
               
       ! total energy adf
       elseif(imet==52) then
          write(aa,'(a,''/adf.out'')')trim(molname(i))
-         call geten_adf(e(i),aa)
+         call get_en_adf(e(i),aa)
 
       ! total energy dft-c
       elseif(imet==53) then
          write(aa,'(a,''/.dftc'')')trim(molname(i))
-         call getendftc(e(i),aa)
+         call get_en_d4(e(i),aa)
 
       ! nl energy from orca output
       elseif(imet==54) then
          write(aa,'(a,''/orca.out'')')trim(molname(i))
-         call getenorcanl(e(i),aa)
+         call get_en_orca_nl(e(i),aa)
 
       ! ri-mp2 correlation energy from orca output
       elseif(imet==55) then
          write(aa,'(a,''/orca.out'')')trim(molname(i))
-         call getrimp2c(e(i),aa)
+         call get_en_orca_rimp2c(e(i),aa)
 
       ! dft correlation energy from orca output
       elseif(imet==56) then
          write(aa,'(a,''/orca.out'')')trim(molname(i))
-         call getdftc(e(i),aa)
+         call get_en_orca_dftc(e(i),aa)
 
       ! ccsd(t) correlation energy from orca output
       elseif(imet==57) then
          write(aa,'(a,''/orca.out'')')trim(molname(i))
-         call getccsdtc(e(i),aa)
+         call get_en_orca_ccsdtc(e(i),aa)
 
       ! qchem final single point
       elseif(imet==58) then
          write(aa,'(a,''/qchem.out'')')trim(molname(i))
-         call getqchemfinalsinglepoint(e(i),aa)
+         call get_en_qchem(e(i),aa)
 
       ! qchem dft correlation
       elseif(imet==59) then
          write(aa,'(a,''/qchem.out'')')trim(molname(i))
-         call getqchemdftcorr(e(i),aa)
+         call get_en_qchem_dftc(e(i),aa)
 
       ! qchem ri-mos mp2 correlation
       elseif(imet==60) then
          write(aa,'(a,''/qchem.out'')')trim(molname(i))
-         call getqchemmosmp2corr(e(i),aa)
+         call get_en_qchem_mosmp2(e(i),aa)
 
       else 
          call raise('e', 'Unknown method')
@@ -137,13 +137,13 @@ subroutine gete(nmol,imet,molname,e)
 
       if(vdw)then
          write(aa,'(a,''/.edisp'')')trim(molname(i))
-         call getend3(edum,aa)
+         call get_en_d4(edum,aa)
          e(i)=e(i)+edum
       endif
 
       if(cp) then
          write(aa,'(a,''/.cpc'')')trim(molname(i))
-         call getengcp(edum2,aa)
+         call get_en_d4(edum2,aa)
          e(i)=e(i)+edum2
       endif
 
