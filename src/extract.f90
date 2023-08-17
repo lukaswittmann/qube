@@ -171,22 +171,21 @@ end
 
 !* D3, D4
 subroutine getend3(e,filen)
-    implicit none
-    real*8 xx(10),e
-    integer nn,iret
-    character*(*) filen
-    character*120 a
-    open(unit=10,file=filen,iostat=iret)
-    if(iret/=0) return
-    4               read(10,'(a)',end=20) a
-    call readl(a,xx,nn)
-    !      if(nn>=4) then
-    !         e=xx(2)
-    !      endif
-    e=xx(1)
-    goto 4
-    20            continue
-    close (10)
+   implicit none
+   real*8 xx(10),e
+   integer nn,iret
+   character*(*) filen
+   character*120 a
+   open(unit=10,file=filen,iostat=iret)
+   if(iret/=0) return
+   4               read(10,'(a)',end=20) a
+   write(*,*) filen
+
+   call readl(a,xx,nn)
+   e=xx(1)
+   goto 4
+   20            continue
+   close (10)
 end
 
 !* ORCA final single point

@@ -69,12 +69,12 @@ subroutine gete(nmol,imet,molname,e)
    
       ! gcp
       elseif(imet==30)then
-         write(aa,'(a,''/.cpc'')')trim(molname(i))
+         write(aa,'(a,''/.CPC'')')trim(molname(i))
          call getengcp(e(i),aa)
          
       ! d3
       elseif(imet==32) then
-         write(aa,'(a,''/.edisp'')')trim(molname(i))
+         write(aa,'(a,''/.EDISP'')')trim(molname(i))
          call getend3(e(i),aa)
               
       ! total energy adf
@@ -121,6 +121,9 @@ subroutine gete(nmol,imet,molname,e)
       elseif(imet==60) then
          write(aa,'(a,''/qchem.out'')')trim(molname(i))
          call getqchemmosmp2corr(e(i),aa)
+
+      else 
+         call raise('e', 'Unknown method')
       
       endif
 

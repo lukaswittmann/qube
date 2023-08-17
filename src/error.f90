@@ -9,11 +9,11 @@ module qube_error
       character(len=*),intent(in) :: message
       select case(mode)
          case('w')
-            print'(''#warning!'',x,a)',message
+            write(*,'(a)') '','Warning: '//message
          case('e')
-            print'(''#error!'',x,a)',  message
+            write(*,'(a)') '','Error: '//message
          case default
-            print'(''#unknown mode!'',x,a)', message
+            write(*,'(a)') '','Unknown: '//message
       end select
       call terminate(1)
    end subroutine raise

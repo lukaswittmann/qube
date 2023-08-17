@@ -4,7 +4,7 @@ license = "LGPL-3.0-or-later"
 author = "lukaswittmann"
 maintainer = "mail@lukaswittmann.com"
 copyright = "Copyright 2023, lukaswittmann"
-keywords = ["counterpoise", "computational-chemistry"]
+keywords = ["computational-chemistry"]
 [build]
 auto-executables = true
 auto-tests = true
@@ -13,6 +13,6 @@ auto-examples = true
 library = false
 
 [dependencies]
-mctc-lib.git = "https://github.com/grimme-lab/mctc-lib.git"
-StringiFor.git = "https://github.com/szaghi/StringiFor.git"
+# mctc-lib.git = "https://github.com/grimme-lab/mctc-lib.git"
+# StringiFor.git = "https://github.com/szaghi/StringiFor.git"
 
